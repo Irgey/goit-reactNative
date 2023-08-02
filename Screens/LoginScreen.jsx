@@ -13,20 +13,23 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useKeyboardVisible } from "../hooks/useKeyboardVisible";
 export const LoginScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordSecurity, setPasswordSecurity] = useState(true);
-  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
-
+  const isKeyboardShown = useKeyboardVisible();
   const onHideKeyboard = () => {
     Keyboard.dismiss();
-    setIsKeyboardShown(false);
   };
-  // useEffect(() => {
-  //   Keyboard.isVisible() ? setIsKeyboardShown(true) : setIsKeyboardShown(false);
-  // }, [Keyboard.isVisible()]);
+  const onLogin = () => {
+    console.log(
+      "Реєстраційні дані",
+      `Електронна пошта: ${email}
+      Пароль: ${password}`
+    );
+  };
   return (
     <TouchableWithoutFeedback onPress={onHideKeyboard}>
       <View style={styles.container}>
@@ -41,6 +44,7 @@ export const LoginScreen = () => {
             <View
               style={{
                 ...styles.loginForm,
+                marginBottom: isKeyboardShown ? -245 : 0,
               }}
             >
               <Text style={styles.title}>Увійти</Text>
@@ -50,7 +54,6 @@ export const LoginScreen = () => {
                   placeholder="Адреса електронної пошти"
                   value={email}
                   onChangeText={setEmail}
-                  onFocus={() => setIsKeyboardShown(true)}
                   inputMode="email"
                 />
                 <View style={styles.passwordInputWrapper}>
@@ -59,10 +62,6 @@ export const LoginScreen = () => {
                     placeholder="Пароль"
                     value={password}
                     onChangeText={setPassword}
-                    onFocus={() => setIsKeyboardShown(true)}
-                    onBlur={() => {
-                      setIsKeyboardShown(false);
-                    }}
                     secureTextEntry={passwordSecurity}
                   />
                   <Pressable
@@ -78,6 +77,7 @@ export const LoginScreen = () => {
                 <TouchableOpacity
                   style={styles.primaryButton}
                   activeOpacity={0.8}
+                  onPress={onLogin}
                 >
                   <Text style={styles.primaryButtonText}>Увійти</Text>
                 </TouchableOpacity>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  Alert,
   Image,
   ImageBackground,
   Keyboard,
@@ -13,20 +14,24 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useKeyboardVisible } from "../hooks/useKeyboardVisible";
 export const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordSecurity, setPasswordSecurity] = useState(true);
-  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
-
+  const isKeyboardShown = useKeyboardVisible();
   const onHideKeyboard = () => {
     Keyboard.dismiss();
-    setIsKeyboardShown(false);
   };
-  // useEffect(() => {
-  //   Keyboard.isVisible() ? setIsKeyboardShown(true) : setIsKeyboardShown(false);
-  // }, [Keyboard.isVisible()]);
+  const onRegister = () => {
+    console.log(
+      "Реєстраційні дані",
+      `Логін: ${login}
+      Електронна пошта: ${email}
+      Пароль: ${password}`
+    );
+  };
   return (
     <TouchableWithoutFeedback onPress={onHideKeyboard}>
       <View style={styles.container}>
@@ -41,6 +46,7 @@ export const RegistrationScreen = () => {
             <View
               style={{
                 ...styles.regForm,
+                marginBottom: isKeyboardShown ? -170 : 0,
               }}
             >
               <View style={styles.avatarHolder}>
@@ -60,14 +66,12 @@ export const RegistrationScreen = () => {
                   placeholder="Логін"
                   value={login}
                   onChangeText={setLogin}
-                  onFocus={() => setIsKeyboardShown(true)}
                 />
                 <TextInput
                   style={email ? styles.inputActive : styles.input}
                   placeholder="Адреса електронної пошти"
                   value={email}
                   onChangeText={setEmail}
-                  onFocus={() => setIsKeyboardShown(true)}
                   inputMode="email"
                 />
                 <View style={styles.passwordInputWrapper}>
@@ -76,10 +80,6 @@ export const RegistrationScreen = () => {
                     placeholder="Пароль"
                     value={password}
                     onChangeText={setPassword}
-                    onFocus={() => setIsKeyboardShown(true)}
-                    onBlur={() => {
-                      setIsKeyboardShown(false);
-                    }}
                     secureTextEntry={passwordSecurity}
                   />
                   <Pressable
@@ -95,6 +95,7 @@ export const RegistrationScreen = () => {
                 <TouchableOpacity
                   style={styles.primaryButton}
                   activeOpacity={0.8}
+                  onPress={onRegister}
                 >
                   <Text style={styles.primaryButtonText}>Зареєструватися</Text>
                 </TouchableOpacity>
