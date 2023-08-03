@@ -14,12 +14,15 @@ import {
   View,
 } from "react-native";
 import { useKeyboardVisible } from "../hooks/useKeyboardVisible";
+import { useNavigation } from "@react-navigation/native";
 export const LoginScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordSecurity, setPasswordSecurity] = useState(true);
   const isKeyboardShown = useKeyboardVisible();
+  const navigation = useNavigation();
+
   const onHideKeyboard = () => {
     Keyboard.dismiss();
   };
@@ -29,6 +32,7 @@ export const LoginScreen = () => {
       `Електронна пошта: ${email}
       Пароль: ${password}`
     );
+    navigation.navigate("Home");
   };
   return (
     <TouchableWithoutFeedback onPress={onHideKeyboard}>
@@ -84,10 +88,11 @@ export const LoginScreen = () => {
                 <TouchableOpacity
                   style={styles.secondaryButton}
                   activeOpacity={0.8}
+                  onPress={() => {
+                    navigation.navigate("Registration");
+                  }}
                 >
-                  <Text style={styles.secondaryButtonText}>
-                    Немає акаунту?{" "}
-                  </Text>
+                  <Text style={styles.secondaryButtonText}>Немає акаунту?</Text>
                   <Text
                     style={{
                       ...styles.secondaryButtonText,

@@ -15,12 +15,14 @@ import {
   View,
 } from "react-native";
 import { useKeyboardVisible } from "../hooks/useKeyboardVisible";
+import { useNavigation } from "@react-navigation/native";
 export const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordSecurity, setPasswordSecurity] = useState(true);
   const isKeyboardShown = useKeyboardVisible();
+  const navigation = useNavigation();
   const onHideKeyboard = () => {
     Keyboard.dismiss();
   };
@@ -31,6 +33,7 @@ export const RegistrationScreen = () => {
       Електронна пошта: ${email}
       Пароль: ${password}`
     );
+    navigation.navigate("Home");
   };
   return (
     <TouchableWithoutFeedback onPress={onHideKeyboard}>
@@ -99,7 +102,12 @@ export const RegistrationScreen = () => {
                 >
                   <Text style={styles.primaryButtonText}>Зареєструватися</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    navigation.navigate("Login");
+                  }}
+                >
                   <Text style={styles.secondaryButtonText}>
                     Вже є акаунт? Увійти
                   </Text>
