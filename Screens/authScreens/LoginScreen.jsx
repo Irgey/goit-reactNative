@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  Alert,
-  Image,
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
@@ -14,23 +12,23 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useKeyboardVisible } from "../hooks/useKeyboardVisible";
 import { useNavigation } from "@react-navigation/native";
-export const RegistrationScreen = () => {
+import { useKeyboardVisible } from "../../hooks/useKeyboardVisible";
+export const LoginScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordSecurity, setPasswordSecurity] = useState(true);
   const isKeyboardShown = useKeyboardVisible();
   const navigation = useNavigation();
+
   const onHideKeyboard = () => {
     Keyboard.dismiss();
   };
-  const onRegister = () => {
+  const onLogin = () => {
     console.log(
       "Реєстраційні дані",
-      `Логін: ${login}
-      Електронна пошта: ${email}
+      `Електронна пошта: ${email}
       Пароль: ${password}`
     );
     navigation.navigate("Home");
@@ -39,7 +37,7 @@ export const RegistrationScreen = () => {
     <TouchableWithoutFeedback onPress={onHideKeyboard}>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../assets/images/bg-photo.jpg")}
+          source={require("../../assets/images/bg-photo.jpg")}
           style={styles.backgroundImage}
         >
           <KeyboardAvoidingView
@@ -48,28 +46,12 @@ export const RegistrationScreen = () => {
           >
             <View
               style={{
-                ...styles.regForm,
-                marginBottom: isKeyboardShown ? -170 : 0,
+                ...styles.loginForm,
+                marginBottom: isKeyboardShown ? -245 : 0,
               }}
             >
-              <View style={styles.avatarHolder}>
-                <Image
-                  source={require("../assets/images/avatarPlaceholder.png")}
-                />
-
-                <Image
-                  style={styles.uploadAvatarButton}
-                  source={require("../assets/icons/add.png")}
-                />
-              </View>
-              <Text style={styles.title}>Реєстрація</Text>
+              <Text style={styles.title}>Увійти</Text>
               <View style={styles.inputsWrapper}>
-                <TextInput
-                  style={login ? styles.inputActive : styles.input}
-                  placeholder="Логін"
-                  value={login}
-                  onChangeText={setLogin}
-                />
                 <TextInput
                   style={email ? styles.inputActive : styles.input}
                   placeholder="Адреса електронної пошти"
@@ -98,18 +80,25 @@ export const RegistrationScreen = () => {
                 <TouchableOpacity
                   style={styles.primaryButton}
                   activeOpacity={0.8}
-                  onPress={onRegister}
+                  onPress={onLogin}
                 >
-                  <Text style={styles.primaryButtonText}>Зареєструватися</Text>
+                  <Text style={styles.primaryButtonText}>Увійти</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  style={styles.secondaryButton}
                   activeOpacity={0.8}
                   onPress={() => {
-                    navigation.navigate("Login");
+                    navigation.navigate("Registration");
                   }}
                 >
-                  <Text style={styles.secondaryButtonText}>
-                    Вже є акаунт? Увійти
+                  <Text style={styles.secondaryButtonText}>Немає акаунту?</Text>
+                  <Text
+                    style={{
+                      ...styles.secondaryButtonText,
+                      textDecorationLine: "underline",
+                    }}
+                  >
+                    Зареєструватися
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -136,9 +125,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
   },
-  regForm: {
-    paddingTop: 92,
-    paddingBottom: 78,
+  loginForm: {
+    paddingTop: 32,
+    paddingBottom: 144,
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: "#fff",
@@ -148,8 +137,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
-  avatarHolder: { position: "absolute", top: -60 },
-  uploadAvatarButton: { position: "absolute", bottom: 14, right: -12.5 },
   title: {
     color: "#212121",
     fontSize: 30,
@@ -224,6 +211,8 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
   },
+  secondaryButton: { display: "flex", flexDirection: "row" },
+
   secondaryButtonText: {
     color: "#1B4371",
     fontSize: 16,

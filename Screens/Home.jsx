@@ -2,10 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-
-import { CreatePostsScreen } from "./CreatePostsScreen";
-import { ProfileScreen } from "./ProfileScreen";
-import { PostsScreen } from "./PostsScreen";
+import { PostsScreen } from "./mainScreens/PostsScreen";
+import { CreatePostsScreen } from "./mainScreens/CreatePostsScreen";
+import { ProfileScreen } from "./mainScreens/ProfileScreen";
 
 const MainTab = createBottomTabNavigator();
 
@@ -47,7 +46,7 @@ export const Home = () => {
           },
           headerTitleStyle: {
             color: "#212121",
-            fontFamily: "Roboto-Medium",
+            fontFamily: "RobotoMedium",
             fontSize: 17,
             marginRight: -16,
           },
@@ -82,7 +81,7 @@ export const Home = () => {
           },
           headerTitleStyle: {
             color: "#212121",
-            fontFamily: "Roboto-Medium",
+            fontFamily: "RobotoMedium",
             fontSize: 17,
           },
         }}

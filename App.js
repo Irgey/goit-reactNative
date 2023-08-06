@@ -1,12 +1,12 @@
 import { useFonts } from "expo-font";
 import "react-native-gesture-handler";
-import { RegistrationScreen } from "./Screens/RegistrationScreen";
-import { LoginScreen } from "./Screens/LoginScreen";
-import { PostsScreen } from "./Screens/PostsScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "./Screens/Home";
-import { Button } from "react-native";
+import { RegistrationScreen } from "./Screens/authScreens/RegistrationScreen";
+import { LoginScreen } from "./Screens/authScreens/LoginScreen";
+import { MapScreen } from "./Screens/MapScreen";
+import { CommentsScreen } from "./Screens/CommentsScreen";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 export default function App() {
@@ -41,6 +41,8 @@ export default function App() {
           component={Home}
           options={{ headerShown: false }}
         />
+        <MainStack.Screen name="Map" component={MapScreen} />
+        <MainStack.Screen name="Comments" component={CommentsScreen} />
       </MainStack.Navigator>
     </NavigationContainer>
   );
