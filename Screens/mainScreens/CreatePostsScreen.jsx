@@ -21,7 +21,7 @@ export const CreatePostsScreen = () => {
   const [photo, setPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [userLocation, setUserLocation] = useState("");
-  const [coords,setCoords] = useState(null)
+  const [coords, setCoords] = useState(null);
   const navigation = useNavigation();
   useEffect(() => {
     (async () => {
@@ -39,15 +39,20 @@ export const CreatePostsScreen = () => {
   const takePhoto = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
-      const {coords} = await Location.getCurrentPositionAsync();
-      setCoords({latitude: coords.latitude, longitude: coords.longitude})
+      const { coords } = await Location.getCurrentPositionAsync();
+      setCoords({ latitude: coords.latitude, longitude: coords.longitude });
       await MediaLibrary.createAssetAsync(uri);
       setPhoto(uri);
     }
   };
   const sendPhoto = () => {
     if (photo) {
-      navigation.navigate("Posts", { photo, title, userLocation, coords });
+      navigation.navigate("DefaultPosts", {
+        photo,
+        title,
+        userLocation,
+        coords,
+      });
       setPhoto(null);
     }
   };

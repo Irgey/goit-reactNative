@@ -1,40 +1,82 @@
-import { useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import { PostCard } from "../../components/PostCard";
+import { createStackNavigator } from "@react-navigation/stack";
+import {
+  CommentsScreen,
+  DefaultPostsScreen,
+  MapScreen,
+} from "../nestedScreens";
+import Feather from "@expo/vector-icons/Feather";
+import { TouchableOpacity } from "react-native";
+const NestedScreen = createStackNavigator();
 
 export const PostsScreen = () => {
-  const route = useRoute();
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    route.params && setPosts((prevState) => [...prevState, route.params]);
-  }, [route.params]);
-  console.log(posts);
-
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={posts}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <PostCard
-            photo={item.photo}
-            title={item.title}
-            location={item.userLocation}
-            coords={item.coords}
-          />
-        )}
+    <NestedScreen.Navigator initialRouteName="DefaultPosts">
+      <NestedScreen.Screen
+        name="DefaultPosts"
+        component={DefaultPostsScreen}
+        options={{
+          headerTitle: "Публікації",
+          headerTitleAlign: "center",
+          headerStyle: {
+            height: 88,
+            borderBottomColor: "rgba(0, 0, 0, 0.30)",
+            borderBottomWidth: 1,
+          },
+          headerTitleStyle: {
+            color: "#212121",
+            fontFamily: "RobotoMedium",
+            fontSize: 17,
+            marginRight: -16,
+          },
+          headerRight: () => (
+            <TouchableOpacity
+            // onPress={handleLogout}
+            >
+              <Feather name="log-out" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          ),
+          headerRightContainerStyle: {
+            paddingRight: 16,
+          },
+          headerLeft: null,
+        }}
       />
-    </View>
+      <NestedScreen.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          headerTitle: "Мапа",
+          headerTitleAlign: "center",
+          headerStyle: {
+            height: 88,
+            borderBottomColor: "rgba(0, 0, 0, 0.30)",
+            borderBottomWidth: 1,
+          },
+          headerTitleStyle: {
+            color: "#212121",
+            fontFamily: "RobotoMedium",
+            fontSize: 17,
+          },
+        }}
+      />
+      <NestedScreen.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{
+          headerTitle: "Коментарі",
+          headerTitleAlign: "center",
+          headerStyle: {
+            height: 88,
+            borderBottomColor: "rgba(0, 0, 0, 0.30)",
+            borderBottomWidth: 1,
+          },
+          headerTitleStyle: {
+            color: "#212121",
+            fontFamily: "RobotoMedium",
+            fontSize: 17,
+          },
+        }}
+      />
+    </NestedScreen.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: 16,
-    paddingTop: 32,
-  },
-});

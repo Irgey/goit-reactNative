@@ -2,9 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { PostsScreen } from "./mainScreens/PostsScreen";
-import { CreatePostsScreen } from "./mainScreens/CreatePostsScreen";
-import { ProfileScreen } from "./mainScreens/ProfileScreen";
+import { PostsScreen } from "./PostsScreen";
+import { CreatePostsScreen } from "./CreatePostsScreen";
+import { ProfileScreen } from "./ProfileScreen";
 
 const MainTab = createBottomTabNavigator();
 
@@ -39,17 +39,7 @@ export const Home = () => {
             top: 17,
             flexGrow: 2,
           },
-          headerTitle: "Публікації",
-          headerTitleAlign: "center",
-          headerStyle: {
-            height: 88,
-          },
-          headerTitleStyle: {
-            color: "#212121",
-            fontFamily: "RobotoMedium",
-            fontSize: 17,
-            marginRight: -16,
-          },
+          headerShown: false,
           headerRight: () => (
             <TouchableOpacity onPress={handleLogout}>
               <Feather name="log-out" size={24} color="#BDBDBD" />
