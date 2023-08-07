@@ -17,7 +17,6 @@ export const uploadPhotoToServer = async (file) => {
     const storageRef = ref(storage, `postImage/${uniquePostId}`);
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
-    console.log("DOWNLOAD URL >>", url);
     return url;
   } catch (error) {
     console.log("error.message >>", error.message);

@@ -24,7 +24,7 @@ export const DefaultPostsScreen = () => {
               postId={item.id}
               photo={item.photo}
               title={item.title}
-              location={item.userLocation}
+              location={item.locality}
               coords={item.coords}
             />
           )}
