@@ -8,7 +8,7 @@ export const DefaultPostsScreen = () => {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     getAllPosts();
-  }, []);
+  }, [getAllPosts]);
   const getAllPosts = async () => {
     const data = await getPosts();
     setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
