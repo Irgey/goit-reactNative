@@ -2,14 +2,21 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import { Provider, useSelector } from "react-redux";
+
 import { PostsScreen } from "./PostsScreen";
 import { CreatePostsScreen } from "./CreatePostsScreen";
 import { ProfileScreen } from "./ProfileScreen";
+import { selectAuth } from "../../redux/selectors";
 
 const MainTab = createBottomTabNavigator();
 
 export const Home = () => {
-  const handleLogout = () => {};
+  const user = useSelector(selectAuth);
+
+  const handleLogout = () => {
+    console.log(user);
+  };
   return (
     <MainTab.Navigator
       screenOptions={{

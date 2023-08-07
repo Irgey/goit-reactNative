@@ -1,16 +1,24 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-export const PostCard = ({ photo, title, location, coords }) => {
+import { getCommentsCount } from "../services/database";
+import { useEffect, useState } from "react";
+export const PostCard = ({ photo, title, location, coords, postId }) => {
   const navigation = useNavigation();
+  const [commentsCount, setCommentsCount] = useState(0);
   const openMap = () => {
     navigation.navigate("Map", { coords });
-    console.log("COORDS", coords);
   };
   const openComments = () => {
-    navigation.navigate("Comments");
+    navigation.navigate("Comments", { postId, photo });
   };
-
+  const getComsCount = async () => {
+    const count = await getCommentsCount(postId);
+    setCommentsCount(count);
+  };
+  useEffect(() => {
+    getComsCount();
+  });
   return (
     <View style={styles.container}>
       <Image source={{ uri: photo }} style={styles.image} />
@@ -21,7 +29,7 @@ export const PostCard = ({ photo, title, location, coords }) => {
           onPress={openComments}
         >
           <Feather name="message-circle" size={24} color="#BDBDBD" />
-          <Text style={styles.commentsCount}>0</Text>
+          <Text style={styles.commentsCount}>{commentsCount}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.commentsContainer} onPress={openMap}>
           <Feather name="map-pin" size={24} color="#BDBDBD" />

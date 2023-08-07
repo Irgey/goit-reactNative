@@ -13,6 +13,11 @@ import * as MediaLibrary from "expo-media-library";
 import { TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
+import { db } from "../../firebase/config";
+import { uriToBlob } from "../../helpers/uriToBlob";
+import { addPostToServer, uploadPhotoToServer } from "../../services/database";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../../redux/selectors";
 
 export const CreatePostsScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -22,6 +27,7 @@ export const CreatePostsScreen = () => {
   const [title, setTitle] = useState("");
   const [userLocation, setUserLocation] = useState("");
   const [coords, setCoords] = useState(null);
+  const { userId, login } = useSelector(selectAuth);
   const navigation = useNavigation();
   useEffect(() => {
     (async () => {
@@ -45,14 +51,28 @@ export const CreatePostsScreen = () => {
       setPhoto(uri);
     }
   };
-  const sendPhoto = () => {
+  const uploadPhoto = async () => {
+    const file = await uriToBlob(photo);
+    return await uploadPhotoToServer(file);
+  };
+  const sendPhoto = async () => {
     if (photo) {
+      const photoURL = await uploadPhoto();
       navigation.navigate("DefaultPosts", {
         photo,
         title,
         userLocation,
         coords,
       });
+
+      await addPostToServer(
+        photoURL,
+        title,
+        userLocation,
+        coords,
+        userId,
+        login
+      );
       setPhoto(null);
     }
   };

@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useKeyboardVisible } from "../../hooks/useKeyboardVisible";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperations";
 export const LoginScreen = () => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
@@ -21,17 +23,19 @@ export const LoginScreen = () => {
   const [passwordSecurity, setPasswordSecurity] = useState(true);
   const isKeyboardShown = useKeyboardVisible();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const onHideKeyboard = () => {
     Keyboard.dismiss();
   };
   const onLogin = () => {
     console.log(
-      "Реєстраційні дані",
+      "Login дані",
       `Електронна пошта: ${email}
       Пароль: ${password}`
     );
-    navigation.navigate("Home");
+    dispatch(authSignInUser(email, password));
+    // navigation.navigate("Home");
   };
   return (
     <TouchableWithoutFeedback onPress={onHideKeyboard}>

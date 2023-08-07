@@ -1,10 +1,92 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Keyboard,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { formatDate } from "../../helpers/formatDate";
+import { addCommentToServer, getComments } from "../../services/database";
+import { useRoute } from "@react-navigation/native";
+import { selectAuth } from "../../redux/selectors";
 
 export const CommentsScreen = () => {
+  const {
+    params: { photo, postId },
+  } = useRoute();
+  const [comment, setComment] = useState("");
+  const [allComments, setAllComments] = useState([]);
+  const { login } = useSelector(selectAuth);
+  const [contentSize, setContentSize] = useState({ height: 50 });
+  useEffect(() => {
+    getAllComments(postId);
+  }, []);
+  const getAllComments = async (postId) => {
+    const snapshot = await getComments(postId);
+    setAllComments(
+      snapshot?.docs?.map((doc) => ({ ...doc.data(), id: doc.id }))
+    );
+  };
+
+  const handleContentSizeChange = (e) => {
+    setContentSize({ height: e.nativeEvent.contentSize.height });
+  };
+
+  const addComment = async () => {
+    if (comment) {
+      await addCommentToServer(comment, login, postId);
+      setComment("");
+      Keyboard.dismiss();
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text>CommentsScreen</Text>
+      <Image source={{ uri: photo }} style={styles.image} />
+      <View style={styles.commentsContainer}>
+        <FlatList
+          data={allComments}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item: { login, comment, createdAt } }) => (
+            <View style={styles.commentContainer}>
+              <Text style={styles.login}>{login}</Text>
+              <View style={styles.comment}>
+                <Text style={styles.text}>{comment}</Text>
+                <Text style={styles.date}>{formatDate(createdAt)}</Text>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+
+      <View>
+        <TextInput
+          style={{
+            ...styles.input,
+            height: Math.max(50, contentSize.height),
+          }}
+          placeholder="Коментувати..."
+          placeholderTextColor="#BDBDBD"
+          cursorColor={"#BDBDBD"}
+          multiline={true}
+          onContentSizeChange={handleContentSizeChange}
+          value={comment}
+          onChangeText={setComment}
+        ></TextInput>
+        <TouchableOpacity
+          style={{ ...styles.inputBtn, top: contentSize.height / 2 - 17 }}
+          activeOpacity={0.7}
+          onPress={addComment}
+        >
+          <AntDesign name="arrowup" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -12,6 +94,64 @@ export const CommentsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+  },
+  commentsContainer: {
+    height: 250,
+  },
+  commentContainer: {
+    flexDirection: "row",
+    gap: 16,
+    marginBottom: 24,
+    justifyContent: "flex-start",
+  },
+  comment: {
+    width: 299,
+    backgroundColor: "rgba(0, 0, 0, 0.03)",
+    padding: 16,
+  },
+  date: {
+    color: "#BDBDBD",
+    fontFamily: "Roboto",
+    fontSize: 10,
+    textAlign: "right",
+  },
+  image: {
+    width: 343,
+    height: 240,
+    borderRadius: 8,
+    marginVertical: 32,
+  },
+  input: {
+    width: 343,
+    borderWidth: 1,
+    backgroundColor: "#F6F6F6",
+    borderColor: "#E8E8E8",
+    borderRadius: 50,
+    padding: 16,
+    paddingEnd: 50,
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 16,
+    position: "relative",
+    marginBottom: 500,
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  inputBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: 50,
+    backgroundColor: "#FF6C00",
     justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 8,
+  },
+  text: {
+    color: "#212121",
+    fontFamily: "Roboto",
+    fontSize: 13,
   },
 });

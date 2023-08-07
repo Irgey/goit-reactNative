@@ -7,7 +7,6 @@ export const MapScreen = () => {
   const {
     params: { coords },
   } = useRoute();
-  console.log("cords", coords);
   return (
     <View style={styles.container}>
       <MapView

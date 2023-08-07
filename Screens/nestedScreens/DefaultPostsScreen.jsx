@@ -2,29 +2,34 @@ import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { PostCard } from "../../components";
+import { getPosts } from "../../services/database";
 
 export const DefaultPostsScreen = () => {
-  const route = useRoute();
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    route.params && setPosts((prevState) => [...prevState, route.params]);
-  }, [route.params]);
-  console.log(posts);
-
+    getAllPosts();
+  }, []);
+  const getAllPosts = async () => {
+    const data = await getPosts();
+    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
   return (
     <View style={styles.container}>
-      <FlatList
-        data={posts}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <PostCard
-            photo={item.photo}
-            title={item.title}
-            location={item.userLocation}
-            coords={item.coords}
-          />
-        )}
-      />
+      {posts.length > 0 && (
+        <FlatList
+          data={posts}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <PostCard
+              postId={item.id}
+              photo={item.photo}
+              title={item.title}
+              location={item.userLocation}
+              coords={item.coords}
+            />
+          )}
+        />
+      )}
     </View>
   );
 };
